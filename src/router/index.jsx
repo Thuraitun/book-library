@@ -3,6 +3,7 @@ import Layout from "../pages/layouts/Layout.jsx";
 import Home from '../pages/Home.jsx'
 import Create from "../pages/Create.jsx";
 import Search from "../pages/Search.jsx";
+import BookDetail from "../pages/BookDetail.jsx";
   
   const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ import Search from "../pages/Search.jsx";
         {
             path: "/search",
             element: <Search />,
+        },
+        {
+          path: "/books/:id",
+          element: <BookDetail />,
         },
       ]
     },
