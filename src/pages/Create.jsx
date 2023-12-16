@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
 
@@ -7,6 +9,9 @@ const Create = () => {
   const [ newCategory, setNewCategory ] = useState('')
   const [ author, setAuthor ] = useState('')
   const [ categories, setCategories ] = useState([])
+
+  const { setPostData, data : book } = useFetch('http://localhost:3000/books', "POST")
+  const navigate = useNavigate()
 
   const addCategory = () => {
     if(newCategory.trim() === '') {
@@ -18,12 +23,31 @@ const Create = () => {
     }
   }
 
+  const addBook = (e) => {
+    e.preventDefault();
+
+    const data =  {
+      title,
+      description,
+      categories,
+      author
+    }
+
+    setPostData(data)
+  }
+
+  useEffect(() => {
+    if(book) {
+      navigate('/')
+    }
+  },[book, navigate])
+  
   return (
     <>
       <div className="text-center my-4">
         <h1 className="text-[22px] text-primary font-bold">Book Create Form</h1>
       </div>
-      <form className="w-full max-w-lg mx-auto">
+      <form className="w-full max-w-lg mx-auto" onSubmit={addBook}>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
