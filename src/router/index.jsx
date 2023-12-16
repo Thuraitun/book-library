@@ -4,6 +4,7 @@ import Home from '../pages/Home.jsx'
 import Create from "../pages/Create.jsx";
 import Search from "../pages/Search.jsx";
 import BookDetail from "../pages/BookDetail.jsx";
+import NotFound from "../pages/NotFound.jsx";
   
   const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ import BookDetail from "../pages/BookDetail.jsx";
         {
           path: "/books/:id",
           element: <BookDetail />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
         },
       ]
     },

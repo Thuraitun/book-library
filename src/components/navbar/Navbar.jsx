@@ -24,11 +24,11 @@ const Navbar = () => {
 
             {/* Create and Profile */}
             <li className="flex items-center gap-2">
-                <NavLink to='/create' className="text-white bg-primary px-3 py-1 rounded-xl flex items-center gap-1">
+                <NavLink to='/create' className="text-primary md:text-white md:bg-primary md:px-3 md:py-1 rounded-xl flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="hidden md:block">Create book</span>
+                    <span className="hidden md:block">Create</span>
                 </NavLink>
                 <div className="w-11 ">
                     <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />
