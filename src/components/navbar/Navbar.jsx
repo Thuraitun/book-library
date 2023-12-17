@@ -1,17 +1,38 @@
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import useTheme from "../../hooks/useTheme";
+import lightIcon from "../../assets/light.svg";
+import darkIcon from "../../assets/dark.svg";
 
 const Navbar = () => {
+
+    const [search, setSearch] = useState('')
+    const navigate = useNavigate()
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+
+        navigate(`/?search=${search}`);
+        setSearch('')
+    }
+
+const { theme, changeTheme } = useTheme()
+
+
   return (
-    <nav className="border border-b-1">
+    <nav className={`border border-b-1`}>
         <ul className="flex items-center justify-between p-4 max-w-7xl mx-auto">
 
             {/* Search */}
             <li className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
 
-                <input type="text" placeholder="Search books..." className="outline-none max-w-[140px] md:max-w-none" />
+                <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search books..." className="outline-none max-w-[140px] md:max-w-none px-1 py-[6px] rounded-md" />
+                <button onClick={handleSearch}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                </button>
+                
             </li>
 
             {/* Logo */}
@@ -32,6 +53,10 @@ const Navbar = () => {
                 </NavLink>
                 <div className="w-11 ">
                     <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />
+                </div>
+                <div className="cursor-pointer">
+                    {theme === 'dark' && <img src={lightIcon} alt="" className="w-[28px]" onClick={() => changeTheme('light') } />}
+                    {theme === 'light' && <img src={darkIcon} alt="" className="w-[28px]" onClick={() => changeTheme('dark') } />}
                 </div>
             </li>
         </ul>

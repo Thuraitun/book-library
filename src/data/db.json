@@ -64,6 +64,16 @@
         "Programming",
         "JavaScript"
       ]
+    },
+    {
+      "title": "Laravel Book",
+      "description": "Laravel is a free, open-source PHP web application framework designed to make web development more elegant, expressive, and efficient. It follows the Model-View-Controller (MVC) architectural pattern and provides a wide range of features for building modern web applications.",
+      "categories": [
+        "PHP",
+        "Laravel"
+      ],
+      "author": "Thurai",
+      "id": 7
     }
   ]
 }

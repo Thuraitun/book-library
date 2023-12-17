@@ -14,9 +14,16 @@ const Create = () => {
   const navigate = useNavigate()
 
   const addCategory = () => {
+
+    if(newCategory && categories.includes(newCategory)) {
+      alert('Your category is already')
+      setNewCategory('')
+      return;
+    }
+
     if(newCategory.trim() === '') {
       alert('please fill category')
-      return
+      return;
     } else {
       setCategories(prev => [ newCategory, ...prev ]);
       setNewCategory('')
@@ -25,6 +32,11 @@ const Create = () => {
 
   const addBook = (e) => {
     e.preventDefault();
+
+    if (!title || !description || !categories.length || !author) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
 
     const data =  {
       title,

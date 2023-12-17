@@ -1,15 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import bookimg from "../../assets/book.png"
 import useFetch from "../../hooks/useFetch";
 
 const BookList = () => {
-    const { data : books, loading, error } = useFetch('http://localhost:3000/books')
+
+    const location = useLocation();
+    const param = new URLSearchParams(location.search);
+    const search = param.get('search');
+
+    const { data : books, loading, error } = useFetch(`http://localhost:3000/books${search ? `?q=${search}` : ''}`)
+
     if(error) {
         return <p className="text-red-500">{error}</p>
     }
+
+
   return (
     <>
-        {loading && <div>loading...</div>}
+        {books === null && loading && <div>loading...</div>}
+        
         {!!books && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-4">
                 {books.map(book => (
@@ -31,6 +40,10 @@ const BookList = () => {
                 </Link>
                 ))}
             </div>
+        )}
+
+        {books && !books.length && !loading && (
+        <p className="text-center text-red-500 text-2xl my-20">No Search Results Found</p>
         )}
     </>
   );
