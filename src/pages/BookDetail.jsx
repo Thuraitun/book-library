@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import bookimg from "../assets/book.png";
 import { useEffect } from "react";
+import useTheme from "../hooks/useTheme";
 
 const BookDetail = () => {
     const {id} = useParams();
@@ -16,8 +17,10 @@ const BookDetail = () => {
             }, 2000)
         }
     }, [error, navigate])
+
+    const {isDark} = useTheme()
   return (
-    <div>
+    <div className="h-screen">
         {error && <div className="text-red-500 my-40 text-center text-[20px]">{ error }</div>}
         {loading && <div>{ loading }</div>}
         {book && 
@@ -26,7 +29,7 @@ const BookDetail = () => {
                     <img src={bookimg} alt="" className="w-full" />
                 </div>
                 <div className="mt-4 md:mt-0 space-y-3">
-                    <h1 className="text-[25px] font-bold text-gray-700">{book.title}</h1>
+                    <h1 className={`text-[25px] font-bold text-gray-700 ${isDark ? 'text-gray-200' : ''}`}>{book.title}</h1>
                     <div className="flex flex-wrap gap-1">
                         {book.categories.map((category, index) => (
                             <span key={index} className="text-white px-2 py-1 bg-primary text-sm rounded-lg">{category}</span>
