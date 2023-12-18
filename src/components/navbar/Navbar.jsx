@@ -21,7 +21,7 @@ const { changeTheme, isDark } = useTheme()
 
   return (
     <nav className={`border border-b-1 sticky top-0 ${isDark ? 'bg-dbg border-none' : 'bg-white'}`}>
-        <ul className="flex items-center justify-between p-4 max-w-7xl mx-auto">
+        <ul className="flex items-center justify-between max-w-7xl p-4 mx-auto z-20">
 
             {/* Search */}
             <li className="flex items-center gap-2">
@@ -49,7 +49,7 @@ const { changeTheme, isDark } = useTheme()
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="hidden md:block">Create</span>
+                    <span className="hidden lg:block">Create</span>
                 </NavLink>
                 <div className="w-11 ">
                     <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />
