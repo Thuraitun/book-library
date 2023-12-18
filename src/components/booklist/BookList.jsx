@@ -1,18 +1,30 @@
 import { Link, useLocation } from "react-router-dom";
 import bookimg from "../../assets/book.png";
-import useFetch from "../../hooks/useFetch";
 import useTheme from "../../hooks/useTheme";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const BookList = () => {
   const location = useLocation();
   const param = new URLSearchParams(location.search);
   const search = param.get("search");
 
-  const {
-    data: books,
-    loading,
-    error,
-  } = useFetch(`http://localhost:3000/books${search ? `?q=${search}` : ""}`);
+  const [ error , setError ] = useState('');
+  const [ books, setBooks ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
+
+  useEffect(() =>{
+    let ref = collection(db, 'books');
+    getDocs(ref).then(docs => {
+      let books = [];
+      docs.forEach(doc => {
+        let book = { id: doc.id, ...doc.data()}
+        books.push(book);
+      })
+      setBooks(books);
+    })
+  }, [])
 
   if (error) {
     return <p className="text-red-500">{error}</p>;
