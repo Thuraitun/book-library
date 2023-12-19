@@ -15,14 +15,28 @@ const BookList = () => {
   const [ loading, setLoading ] = useState(false);
 
   useEffect(() =>{
+    setLoading(true);
     let ref = collection(db, 'books');
     getDocs(ref).then(docs => {
-      let books = [];
-      docs.forEach(doc => {
-        let book = { id: doc.id, ...doc.data()}
-        books.push(book);
-      })
-      setBooks(books);
+
+      if(docs.empty) {
+
+        setError('No documents found')
+        setLoading(false);
+
+
+      } else {
+
+        let books = [];
+        docs.forEach(doc => {
+          let book = { id: doc.id, ...doc.data()}
+          books.push(book);
+        })
+        setBooks(books);
+        setLoading(false);
+        setError('')
+
+      }
     })
   }, [])
 
@@ -34,7 +48,7 @@ const BookList = () => {
 
   return (
     <>
-      {books === null && loading && <div>loading...</div>}
+      {!books && loading && <div>loading...</div>}
 
       {!!books && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-4 z-30">
@@ -80,7 +94,7 @@ const BookList = () => {
         </div>
       )}
 
-      {books && !books.length && !loading && (
+      {books && !books.length && (
         <p className="text-center text-red-500 text-2xl my-20">
           No Search Results Found
         </p>
