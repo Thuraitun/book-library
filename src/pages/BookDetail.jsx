@@ -1,9 +1,9 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import bookimg from "../assets/book.png";
+import bookimg from "../assets/fullstack.webp";
 import { useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme";
 import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const BookDetail = () => {
     const {id} = useParams();
@@ -15,7 +15,7 @@ const BookDetail = () => {
     useEffect(() => {
         setLoading(true);
         let ref = doc(db, 'books', id)
-        getDoc(ref).then(doc => {
+        onSnapshot(ref, doc => {
             if(doc.exists()) {
                 let book = {id: doc.id, ...doc.data()};
                 setBook(book);
@@ -48,7 +48,7 @@ const BookDetail = () => {
                     <img src={bookimg} alt="" className="w-full" />
                 </div>
                 <div className="mt-4 md:mt-0 space-y-3">
-                    <h1 className={`text-[25px] font-bold text-gray-700 ${isDark ? 'text-gray-50' : ''}`}>{book.title}</h1>
+                    <h1 className={`text-[25px] font-bold text-gray-700 ${isDark ? 'text-white' : ''}`}>{book.title}</h1>
                     <div className="flex flex-wrap gap-1">
                         {book.categories.map((category, index) => (
                             <span key={index} className="text-white px-2 py-1 bg-primary text-sm rounded-lg">{category}</span>
@@ -58,7 +58,9 @@ const BookDetail = () => {
                     <div className="flex justify-end">
                         <p className="italic text-sm text-gray-500"><span className="text-primary">Author By </span>- {book.author}</p>
                     </div>
-                    <Link to='/' className="py-2 px-4 bg-primary rounded-md text-white">Back</Link>
+                    <div className="my-3 md:my-0">
+                        <Link to='/' className="py-2 px-4 bg-primary rounded-md text-white">Back</Link>
+                    </div>
                 </div>
             </div>
         }  

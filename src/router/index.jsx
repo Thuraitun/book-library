@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/layouts/Layout.jsx";
 import Home from '../pages/Home.jsx'
-import Create from "../pages/Create.jsx";
+import BookForm from "../pages/BookForm.jsx";
 import Search from "../pages/Search.jsx";
 import BookDetail from "../pages/BookDetail.jsx";
 import NotFound from "../pages/NotFound.jsx";
@@ -17,7 +17,11 @@ import NotFound from "../pages/NotFound.jsx";
         },
         {
             path: "/create",
-            element: <Create />,
+            element: <BookForm />,
+        },
+        {
+          path: "/edit/:id",
+          element: <BookForm />,
         },
         {
             path: "/search",

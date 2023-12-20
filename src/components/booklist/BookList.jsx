@@ -1,9 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import bookimg from "../../assets/book.png";
+import bookimg from "../../assets/fullstack.webp";
 import useTheme from "../../hooks/useTheme";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
+import trash from "../../assets/trash.svg"
+import edit from "../../assets/edit.svg"
 
 const BookList = () => {
   const location = useLocation();
@@ -14,17 +16,24 @@ const BookList = () => {
   const [ books, setBooks ] = useState([]);
   const [ loading, setLoading ] = useState(false);
 
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    
+    let ref = doc(db, "books", id);
+    alert("Your Book deleted")
+    await deleteDoc(ref)
+  }
+  
   useEffect(() =>{
     setLoading(true);
     let ref = collection(db, 'books');
-    getDocs(ref).then(docs => {
+    let q = query(ref, orderBy('date', 'desc'));
+   
+    onSnapshot(q, docs => {
 
       if(docs.empty) {
-
         setError('No documents found')
         setLoading(false);
-
-
       } else {
 
         let books = [];
@@ -49,7 +58,7 @@ const BookList = () => {
   return (
     <>
       {!books && loading && <div>loading...</div>}
-
+      
       {!!books && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-4 z-30">
           {books.map((book) => (
@@ -64,7 +73,7 @@ const BookList = () => {
                 <img
                   src={bookimg}
                   alt=""
-                  className=" w-full hover:scale-150 transition duration-300"
+                  className=" w-full"
                 />
               </div>
               <div className="space-y-2 mt-3">
@@ -78,15 +87,26 @@ const BookList = () => {
                     Author By - {book.author}
                   </p>
                 </div>
-                <div className="flex flex-wrap">
-                  {book.categories.map((category, index) => (
-                    <span
-                      key={index}
-                      className="mx-1 my-1 text-white px-2 py-1 bg-primary text-[12px] rounded-lg"
-                    >
-                      {category}
-                    </span>
-                  ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 space-y-2 md:space-y-0">
+                  <div className="flex flex-wrap">
+                    {book.categories.map((category, index) => (
+                      <div key={index}>
+                        <span
+                          className=" mx-1 my-1 text-white px-2 py-1 bg-primary text-[12px] rounded-lg"
+                        >
+                          {category}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between md:justify-end space-x-1">
+                    <Link to={`/edit/${book.id}`}>
+                      <img src={edit} alt="" />
+                    </Link>
+                    <div onClick={(e) => handleDelete(e, book.id)} className="">
+                      <img src={trash} alt="" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Link>

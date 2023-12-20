@@ -1,17 +1,43 @@
 import { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
-import { useNavigate } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
+import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { db } from "../firebase"
+import { useNavigate, useParams } from "react-router-dom";
+import close from "../assets/close.svg"
 
 const Create = () => {
+
+  const { id } = useParams()
 
   const [ title, setTitle ] = useState('') 
   const [ description, setDescription ] = useState('')
   const [ newCategory, setNewCategory ] = useState('')
   const [ author, setAuthor ] = useState('')
   const [ categories, setCategories ] = useState([])
+  const [ isEdit, setIsEdit ] = useState(false)
 
-  const { setPostData, data : book } = useFetch('http://localhost:3000/books', "POST")
+  useEffect(() => {
+    if(id) {
+      setIsEdit(true)
+      let ref = doc(db, 'books', id)
+        getDoc(ref).then(doc => {
+            if(doc.exists()) {
+              let {title, description, categories, author }  =  doc.data();
+              setTitle(title) 
+              setDescription(description) 
+              setCategories(categories) 
+              setAuthor(author) 
+            } 
+        })
+    } else {
+      setIsEdit(false)
+      setTitle('') 
+      setDescription('') 
+      setCategories([]) 
+      setAuthor('') 
+    }
+  }, [id])
+
   const navigate = useNavigate()
 
   const addCategory = () => {
@@ -31,7 +57,7 @@ const Create = () => {
     }
   }
 
-  const addBook = (e) => {
+  const submitForm = (e) => {
     e.preventDefault();
 
     if (!title || !description || !categories.length || !author) {
@@ -43,26 +69,35 @@ const Create = () => {
       title,
       description,
       categories,
-      author
+      author,
+      date: serverTimestamp()
     }
 
-    setPostData(data)
+    if(isEdit) {
+      let ref = doc(db, 'books', id);
+      updateDoc(ref, data)
+    } else {
+      // firebase create data 
+      const ref = collection(db, 'books')
+      addDoc(ref, data)
+
+    }
+    navigate('/');
+
+    
   }
-
-  useEffect(() => {
-    if(book) {
-      navigate('/')
-    }
-  },[book, navigate])
   
+  const deleteCategory = () => {
+    
+  }
 
   const {isDark} = useTheme()
   return (
     <div className="h-screen">
       <div className="text-center my-4">
-        <h1 className="text-[22px] text-primary font-bold">Book Create Form</h1>
+        <h1 className="text-[22px] text-primary font-bold">Book {isEdit ? 'Update':'Create'} Form</h1>
       </div>
-      <form className="w-full max-w-lg mx-auto" onSubmit={addBook}>
+      <form className="w-full max-w-lg mx-auto" onSubmit={submitForm}>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className={`block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 ${isDark ? 'text-gray-200' : ''}`}>
@@ -91,9 +126,14 @@ const Create = () => {
               </button>
             </div>
           </div>
-          <div className="w-full px-3 flex flex-wrap gap-1 mb-3">
+          <div className="w-full px-3 flex flex-wrap gap-1 my-3">
             {categories.map((category, index) => (
-              <span key={index} className="my-1 text-white px-2 py-1 bg-primary text-sm rounded-lg">{category}</span>
+              <div className="relative" key={index}>
+                <span className="my-1 text-white px-2 py-1 bg-primary text-sm rounded-lg">{category}</span>
+                <div className="absolute -top-2 right-0" onClick={deleteCategory}>
+                  <img src={close} alt="" className="w-[14px] bg-red-500 rounded-full" />
+                </div>
+              </div>
             ))}
           </div>
 
@@ -109,7 +149,7 @@ const Create = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="">Create</span>
+                <span className="">{isEdit ? 'Update':'Create'} Book</span>
             </button>
           </div>
         </div>
