@@ -84,11 +84,12 @@ const Create = () => {
     }
     navigate('/');
 
-    
   }
   
-  const deleteCategory = () => {
-    
+  const deleteCategory = (index) => {
+    const updatedCategories = [...categories];
+    updatedCategories.splice(index, 1);
+    setCategories(updatedCategories);
   }
 
   const {isDark} = useTheme()
@@ -130,7 +131,7 @@ const Create = () => {
             {categories.map((category, index) => (
               <div className="relative" key={index}>
                 <span className="my-1 text-white px-2 py-1 bg-primary text-sm rounded-lg">{category}</span>
-                <div className="absolute -top-2 right-0" onClick={deleteCategory}>
+                <div className="absolute -top-2 right-0" onClick={() => deleteCategory(index)}>
                   <img src={close} alt="" className="w-[14px] bg-red-500 rounded-full" />
                 </div>
               </div>
