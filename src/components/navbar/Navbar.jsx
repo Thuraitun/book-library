@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
 import lightIcon from "../../assets/light.svg";
 import darkIcon from "../../assets/dark.svg";
+import useSignout from "../../hooks/useSignout";
 
 const Navbar = () => {
 
@@ -17,6 +18,13 @@ const Navbar = () => {
     }
 
 const { changeTheme, isDark } = useTheme()
+
+const { logout } = useSignout()
+
+const handleLogout = async() => {
+    await logout()
+    navigate('/login')
+}
 
 
   return (
@@ -57,6 +65,16 @@ const { changeTheme, isDark } = useTheme()
                 <div className="cursor-pointer">
                     {isDark && <img src={ lightIcon } alt="" className="w-[28px]" onClick={() => changeTheme('light') } />}
                     {!isDark && <img src={ darkIcon } alt="" className="w-[28px]" onClick={() => changeTheme('dark') } />}
+                </div>
+                <div className="">
+                    <button onClick={handleLogout} className="bg-red-500 p-2 rounded-lg text-white text-sm flex space-x-1 items-center">
+                        <span className="">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                            </svg>
+                        </span>
+                        <span className="hidden md:block">Logout</span>
+                    </button>
                 </div>
             </li>
         </ul>
