@@ -18,13 +18,12 @@ const Register = () => {
       try {
         let user = await signUp(email, password)
 
-        if(!error) {
+        if(!user.error) {
           navigate('/')    
         }
       } catch(e) {
         console.log(e.message);
       }
-
     
   }
 
