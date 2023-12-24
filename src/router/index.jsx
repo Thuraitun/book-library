@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/layouts/Layout.jsx";
 import Home from '../pages/Home.jsx'
 import BookForm from "../pages/BookForm.jsx";
@@ -7,7 +7,17 @@ import BookDetail from "../pages/BookDetail.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import Register from "../pages/Register.jsx";
 import Login from "../pages/Login.jsx";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext.jsx";
   
+  
+
+const index = () => {
+
+  const { authReady, user } = useContext(AuthContext)
+
+  const isAuthenticated = Boolean(user)
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -15,31 +25,31 @@ import Login from "../pages/Login.jsx";
       children: [
         {
             path: "",
-            element: <Home />,
+            element: isAuthenticated ? <Home /> : <Navigate to="/login" />
         },
         {
             path: "/create",
-            element: <BookForm />,
+            element: isAuthenticated ? <BookForm /> : <Navigate to="/login" />
         },
         {
           path: "/edit/:id",
-          element: <BookForm />,
+          element: isAuthenticated ? <BookForm /> : <Navigate to="/login" />
         },
         {
             path: "/search",
-            element: <Search />,
+            element: isAuthenticated ? <Search /> : <Navigate to="/login" />
         },
         {
           path: "/books/:id",
-          element: <BookDetail />,
+          element: isAuthenticated ? <BookDetail /> : <Navigate to="/login" />
         },
         {
           path: "/register",
-          element: <Register />,
+          element: !isAuthenticated ? <Register /> : <Navigate to="/" />
         },
         {
           path: "/login",
-          element: <Login />,
+          element: !isAuthenticated ? <Login /> : <Navigate to="/" />
         },
         {
           path: "*",
@@ -49,4 +59,9 @@ import Login from "../pages/Login.jsx";
     },
   ]);
 
-export default router;
+  return (
+    authReady && <RouterProvider router={router} />
+  );
+}
+
+export default index;

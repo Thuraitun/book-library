@@ -10,6 +10,8 @@ const AuthReducer = (state, action) => {
             return { ...state, user: action.payload}
         case "LOG_OUT":
             return { ...state, user: null}
+        case "AUTH_READY":
+            return { ...state, authReady: true}
         default:
             return state;
     }
@@ -17,13 +19,13 @@ const AuthReducer = (state, action) => {
 
 const AuthContextProvider = ({children}) => {
 
-    const [ state, disptach ] = useReducer(AuthReducer, { user : null})
+    const [ state, disptach ] = useReducer(AuthReducer, { user : null, authReady: false} );
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
+            disptach({ type: "AUTH_READY"})
             if(user) {
                 disptach({ type: "LOG_IN", payload: user })
-                console.log(user)
             } else {
                 disptach({ type: "LOG_OUT" })
             }

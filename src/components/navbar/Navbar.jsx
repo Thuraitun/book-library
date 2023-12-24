@@ -19,7 +19,6 @@ const Navbar = () => {
     }
 
 const {user} = useContext(AuthContext)
-console.log(user)
 
 const { changeTheme, isDark } = useTheme()
 
