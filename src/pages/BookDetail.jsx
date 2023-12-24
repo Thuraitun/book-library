@@ -1,33 +1,18 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import bookimg from "../assets/fullstack.webp";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useTheme from "../hooks/useTheme";
 import { db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import useFirestore from "../hooks/useFirestore";
 
 const BookDetail = () => {
     const {id} = useParams();
     const navigate = useNavigate();
-    const [ error , setError ] = useState('');
-    const [ book, setBook ] = useState(null);
-    const [ loading, setLoading ] = useState(false);
+    
+    const { GetDocument } = useFirestore()
+    const { error, data: book, loading} = GetDocument('books', id)
 
-    useEffect(() => {
-        setLoading(true);
-        let ref = doc(db, 'books', id)
-        onSnapshot(ref, doc => {
-            if(doc.exists()) {
-                let book = {id: doc.id, ...doc.data()};
-                setBook(book);
-                setLoading(false);
-                setError('')
-            } else {
-                setError('no document found');
-                setLoading(false);
-            }
-            
-        })
-    }, [id])
+    
 
     useEffect(() => {
         if(error) {

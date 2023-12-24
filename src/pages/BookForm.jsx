@@ -4,6 +4,7 @@ import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'fir
 import { db } from "../firebase"
 import { useNavigate, useParams } from "react-router-dom";
 import close from "../assets/close.svg"
+import useFirestore from "../hooks/useFirestore";
 
 const Create = () => {
 
@@ -40,6 +41,8 @@ const Create = () => {
 
   const navigate = useNavigate()
 
+  const { AddCollection, UpdateDocument } = useFirestore()
+
   const addCategory = () => {
 
     if(newCategory && categories.includes(newCategory)) {
@@ -57,7 +60,7 @@ const Create = () => {
     }
   }
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
 
     if (!title || !description || !categories.length || !author) {
@@ -74,12 +77,10 @@ const Create = () => {
     }
 
     if(isEdit) {
-      let ref = doc(db, 'books', id);
-      updateDoc(ref, data)
+      await UpdateDocument('books', id, data)
     } else {
       // firebase create data 
-      const ref = collection(db, 'books')
-      addDoc(ref, data)
+       await AddCollection('books', data)
 
     }
     navigate('/');
