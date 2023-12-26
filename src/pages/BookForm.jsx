@@ -18,6 +18,8 @@ const Create = () => {
   const [ author, setAuthor ] = useState('')
   const [ categories, setCategories ] = useState([])
   const [ isEdit, setIsEdit ] = useState(false)
+  const [ file, setFile ] = useState(null)
+  const [ preview, setPreview ] = useState('');
 
   useEffect(() => {
     if(id) {
@@ -46,6 +48,27 @@ const Create = () => {
   const { AddCollection, UpdateDocument } = useFirestore()
 
   const { user } = useContext(AuthContext)
+
+
+  const handlePhotoChange = (e) => {
+      setFile(e.target.files[0])
+  }
+
+  const handlePreveiwImage = (file) => {
+    let reader = new FileReader;
+    reader.readAsDataURL(file)
+
+    reader.onload = () => {
+      setPreview(reader.result)
+    }
+
+  }
+
+  useEffect(() => {
+    if(file) {
+      handlePreveiwImage(file);
+    }
+  }, [file])
 
   const addCategory = () => {
 
@@ -141,6 +164,17 @@ const Create = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="w-full px-3">
+            <label className={`block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 ${isDark ? 'text-gray-100' : ''}`}>
+              Book Cover
+            </label>
+            <input onChange={handlePhotoChange} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"  type="file" />
+          </div>
+
+          <div className="w-full px-3 py-2">
+            {!!preview && <img src={preview} alt="" className="border border-primary rounded-md p-6"/>}
           </div>
 
           <div className="w-full px-3">
