@@ -1,19 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
 import bookimg from "../../assets/fullstack.webp";
 import useTheme from "../../hooks/useTheme";
-import { db } from "../../firebase";
 import trash from "../../assets/trash.svg"
 import edit from "../../assets/edit.svg"
-import { deleteDoc, doc } from "firebase/firestore";
 import useFirestore from "../../hooks/useFirestore";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const BookList = () => {
   const location = useLocation();
   const param = new URLSearchParams(location.search);
   const search = param.get("search");
 
+  const { user } = useContext(AuthContext)
+
   const { DeleteDocument, GetCollection } = useFirestore()
-  let {error, data: books, loading } = GetCollection('books')
+  let {error, data: books, loading } = GetCollection('books', [ 'uid', '==', user.uid ])
 
   const handleDelete = async (e, id) => {
     e.preventDefault();
@@ -24,7 +26,7 @@ const BookList = () => {
   
 
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return <p className="text-red-500 my-10 text-[20px] text-center">{error}</p>;
   }
 
   const { isDark } = useTheme();

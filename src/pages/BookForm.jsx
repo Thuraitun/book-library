@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme";
-import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from "../firebase"
 import { useNavigate, useParams } from "react-router-dom";
 import close from "../assets/close.svg"
 import useFirestore from "../hooks/useFirestore";
+import { AuthContext } from "../contexts/AuthContext.jsx";
+
 
 const Create = () => {
 
@@ -43,6 +45,8 @@ const Create = () => {
 
   const { AddCollection, UpdateDocument } = useFirestore()
 
+  const { user } = useContext(AuthContext)
+
   const addCategory = () => {
 
     if(newCategory && categories.includes(newCategory)) {
@@ -73,7 +77,7 @@ const Create = () => {
       description,
       categories,
       author,
-      date: serverTimestamp()
+      uid: user.uid,
     }
 
     if(isEdit) {

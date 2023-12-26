@@ -1,18 +1,25 @@
-import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
+import { useEffect, useRef, useState } from "react";
 import { db } from "../firebase";
 
 const useFirestore = () => {
-    const GetCollection = (colName) => {
+    const GetCollection = (colName, _q) => {
 
         const [ error , setError ] = useState('');
         const [ data, setData ] = useState([]);
         const [ loading, setLoading ] = useState(false);
 
+        const qRef = useRef(_q).current;
+
         useEffect(() =>{
             setLoading(true);
             let ref = collection(db, colName);
-            let q = query(ref, orderBy('date', 'desc'));
+            let queries = [];
+            if(qRef) {
+                queries.push(where(...qRef))
+            }
+            queries.push(orderBy('date', 'desc'));
+            let q = query(ref, ...queries);
            
             onSnapshot(q, docs => {
         
@@ -32,7 +39,7 @@ const useFirestore = () => {
         
               }
             })
-          }, [colName])
+          }, [colName, qRef])
 
           return { error, data, loading}
     }
@@ -70,11 +77,13 @@ const useFirestore = () => {
     }
 
     const AddCollection = async (colName, data) => {
+        data.date = serverTimestamp()
         const ref = collection(db, colName)
         return addDoc(ref, data)
     }
 
     const UpdateDocument = async (colName, id, data) => {
+        data.date = serverTimestamp()
         let ref = doc(db, colName, id);
         return updateDoc(ref, data)
     }
