@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme";
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from "../firebase"
+import { db, storage } from "../firebase"
 import { useNavigate, useParams } from "react-router-dom";
 import close from "../assets/close.svg"
 import useFirestore from "../hooks/useFirestore";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 
 const Create = () => {
@@ -20,6 +21,9 @@ const Create = () => {
   const [ isEdit, setIsEdit ] = useState(false)
   const [ file, setFile ] = useState(null)
   const [ preview, setPreview ] = useState('');
+
+  const { user } = useContext(AuthContext)
+
 
   useEffect(() => {
     if(id) {
@@ -47,7 +51,6 @@ const Create = () => {
 
   const { AddCollection, UpdateDocument } = useFirestore()
 
-  const { user } = useContext(AuthContext)
 
 
   const handlePhotoChange = (e) => {
@@ -86,9 +89,20 @@ const Create = () => {
       setNewCategory('')
     }
   }
+  
+  const uploadToFirebase = async (file) => {
+      let uniqueFileName = Date.now().toString()+'_'+file.name;
+      let path = '/covers/'+ user.uid+'/'+ uniqueFileName;
+      let storageRef = ref(storage, path);
+      await uploadBytes(storageRef, file);
+      return await getDownloadURL(storageRef)
+  }
+
 
   const submitForm = async (e) => {
     e.preventDefault();
+    
+    const url = await uploadToFirebase(file)
 
     if (!title || !description || !categories.length || !author) {
       alert("Please fill in all the required fields.");
@@ -101,12 +115,13 @@ const Create = () => {
       categories,
       author,
       uid: user.uid,
+      cover: url
     }
 
     if(isEdit) {
       await UpdateDocument('books', id, data)
     } else {
-      // firebase create data 
+      
        await AddCollection('books', data)
 
     }

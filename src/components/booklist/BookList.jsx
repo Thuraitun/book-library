@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import bookimg from "../../assets/fullstack.webp";
 import useTheme from "../../hooks/useTheme";
 import trash from "../../assets/trash.svg"
 import edit from "../../assets/edit.svg"
@@ -47,9 +46,9 @@ const BookList = () => {
             >
               <div className="overflow-hidden">
                 <img
-                  src={bookimg}
+                  src={book.cover}
                   alt=""
-                  className=" w-full"
+                  className=" w-full h-[180px] md:h-[330px]"
                 />
               </div>
               <div className="space-y-2 mt-3">
@@ -60,7 +59,7 @@ const BookList = () => {
                     {book.title}
                   </h1>
                   <p className="italic text-sm text-gray-500">
-                    Author By - {book.author}
+                    Owner By - {book.author}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 space-y-2 md:space-y-0">

@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import bookimg from "../assets/fullstack.webp";
 import { useEffect } from "react";
 import useTheme from "../hooks/useTheme";
 import { db } from "../firebase";
@@ -30,7 +29,7 @@ const BookDetail = () => {
         {book && 
             <div className="md:flex md:items-center m-4 md:m-14 md:space-x-10">
                 <div className="md:w-[1300px]">
-                    <img src={bookimg} alt="" className="w-full" />
+                    <img src={book.cover} alt="" className="w-full" />
                 </div>
                 <div className="mt-4 md:mt-0 space-y-3">
                     <h1 className={`text-[25px] font-bold text-gray-700 ${isDark ? 'text-white' : ''}`}>{book.title}</h1>
