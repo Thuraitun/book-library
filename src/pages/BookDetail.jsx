@@ -52,7 +52,7 @@ const BookDetail = () => {
                 </div>
 
                 <div className="">
-
+                    <h1 className="font-bold text-center text-primary text-2xl my-5">My Notes</h1>                   
                     <NoteForm />
                     <NoteList />
                     
