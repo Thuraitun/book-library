@@ -15,7 +15,7 @@ const BookList = () => {
   const { user } = useContext(AuthContext)
 
   const { DeleteDocument, GetCollection } = useFirestore()
-  let {error, data: books, loading } = GetCollection('books', [ 'uid', '==', user.uid ], search && { field: 'title', value: search})
+  let {error, data: books, loading } = GetCollection('books', [ 'uid', '==', user.uid ],{ field: 'title', value: search})
 
 
   const handleDelete = async (e, id) => {

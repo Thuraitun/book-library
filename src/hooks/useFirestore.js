@@ -36,9 +36,9 @@ const useFirestore = () => {
                   collectionDatas.push(document);
                 })
 
-                if(search.field) {
+                if(search?.field && search?.value) {
                     let searchedDatas = collectionDatas.filter(doc => {
-                        return doc[search.field].toUpperCase().includes(search.value.toUpperCase())
+                        return doc[search?.field].toUpperCase().includes(search?.value.toUpperCase())
                     })
                     
                     setData(searchedDatas)
@@ -52,7 +52,7 @@ const useFirestore = () => {
         
               }
             })
-          }, [colName, qRef, search.field, search.value])
+          }, [colName, qRef, search?.field, search?.value])
 
           return { error, data, loading}
     }

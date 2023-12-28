@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
 import lightIcon from "../../assets/light.svg";
 import darkIcon from "../../assets/dark.svg";
@@ -7,6 +7,7 @@ import useSignout from "../../hooks/useSignout";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
+    const location = useLocation();
     const param = new URLSearchParams(location.search);
     const searchValue = param.get("search");
     const [search, setSearch] = useState(searchValue)
@@ -63,9 +64,9 @@ const handleLogout = async() => {
                     </svg>
                     <span className="hidden lg:block">Create</span>
                 </NavLink>
-                <div className="w-11 ">
-                    {user && <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />}
-                </div>
+                {user && <div className="w-11 ">
+                    <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />
+                </div>}
                 <div className="cursor-pointer">
                     {isDark && <img src={ lightIcon } alt="" className="w-[28px]" onClick={() => changeTheme('light') } />}
                     {!isDark && <img src={ darkIcon } alt="" className="w-[28px]" onClick={() => changeTheme('dark') } />}
