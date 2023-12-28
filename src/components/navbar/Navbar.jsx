@@ -63,7 +63,7 @@ const handleLogout = async() => {
                     <span className="hidden lg:block">Create</span>
                 </NavLink>
                 <div className="w-11 ">
-                    <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />
+                    {user && <img src="https://avatars.githubusercontent.com/u/118127700?v=4" alt="" className="w-full rounded-full" />}
                 </div>
                 <div className="cursor-pointer">
                     {isDark && <img src={ lightIcon } alt="" className="w-[28px]" onClick={() => changeTheme('light') } />}
@@ -71,8 +71,26 @@ const handleLogout = async() => {
                 </div>
                 <div className="flex items-center space-x-2">
                     {!user && <>
-                        <Link to='/login' className="border-2 border-primary text-primary px-2 py-[6px] rounded-md text-sm">Login</Link>
-                        <Link to='/register' className="bg-primary text-white p-2 rounded-md text-sm">Register</Link>
+                        <Link to='/login' className="border-2 border-primary text-primary px-1 py-[2px] md:px-2 md:py-[6px] rounded-md text-sm">
+                            <span className="hidden md:block">
+                                Login
+                            </span>
+                            <span className="md:hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                </svg>
+                            </span>
+                        </Link>
+                        <Link to='/register' className="bg-primary text-white p-1 md:p-2 rounded-md text-sm">
+                            <span className="hidden md:block">
+                                Register
+                            </span>
+                            <span className="md:hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-white">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                </svg>
+                            </span>
+                        </Link>
                     </>}
                     {!!user && <button onClick={handleLogout} className="bg-red-500 p-2 rounded-lg text-white text-sm flex space-x-1 items-center">
                         <span className="">

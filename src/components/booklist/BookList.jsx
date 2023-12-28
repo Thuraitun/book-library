@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
 import trash from "../../assets/trash.svg"
 import edit from "../../assets/edit.svg"
@@ -9,6 +9,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 const BookList = () => {
   const location = useLocation();
   const param = new URLSearchParams(location.search);
+  const navigate = useNavigate();
   const search = param.get("search");
 
   const { user } = useContext(AuthContext)
@@ -28,6 +29,7 @@ const BookList = () => {
     return <p className="text-red-500 my-10 text-[20px] text-center">{error}</p>;
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { isDark } = useTheme();
 
   return (
@@ -75,9 +77,14 @@ const BookList = () => {
                     ))}
                   </div>
                   <div className="flex justify-between md:justify-end space-x-1">
-                    <Link to={`/edit/${book.id}`}>
-                      <img src={edit} alt="" />
-                    </Link>
+                    
+                    <div className="">
+                      <img src={edit} alt="" onClick={(e) => {
+                        e.preventDefault();
+                        navigate(`/edit/${book.id}`)
+                      }} />
+                    </div>
+          
                     <div onClick={(e) => handleDelete(e, book.id)} className="">
                       <img src={trash} alt="" />
                     </div>

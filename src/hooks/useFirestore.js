@@ -26,6 +26,7 @@ const useFirestore = () => {
               if(docs.empty) {
                 setError('No documents found')
                 setLoading(false);
+                setData([])
               } else {
         
                 let collectionDatas = [];
