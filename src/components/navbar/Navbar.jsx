@@ -7,8 +7,9 @@ import useSignout from "../../hooks/useSignout";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
-
-    const [search, setSearch] = useState('')
+    const param = new URLSearchParams(location.search);
+    const searchValue = param.get("search");
+    const [search, setSearch] = useState(searchValue)
     const navigate = useNavigate()
 
     const handleSearch = (e) => {

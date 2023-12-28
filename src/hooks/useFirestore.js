@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { db } from "../firebase";
 
 const useFirestore = () => {
-    const GetCollection = (colName, _q) => {
+
+    const GetCollection = (colName, _q, search) => {
 
         const [ error , setError ] = useState('');
         const [ data, setData ] = useState([]);
@@ -34,13 +35,24 @@ const useFirestore = () => {
                   let document = { id: doc.id, ...doc.data()}
                   collectionDatas.push(document);
                 })
-                setData(collectionDatas);
+
+                if(search.field) {
+                    let searchedDatas = collectionDatas.filter(doc => {
+                        return doc[search.field].toUpperCase().includes(search.value.toUpperCase())
+                    })
+                    
+                    setData(searchedDatas)
+                } else {
+                    
+                    setData(collectionDatas);
+                }
+            
                 setLoading(false);
                 setError('')
         
               }
             })
-          }, [colName, qRef])
+          }, [colName, qRef, search.field, search.value])
 
           return { error, data, loading}
     }

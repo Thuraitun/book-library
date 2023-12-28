@@ -9,13 +9,14 @@ import { AuthContext } from "../../contexts/AuthContext";
 const BookList = () => {
   const location = useLocation();
   const param = new URLSearchParams(location.search);
-  const navigate = useNavigate();
   const search = param.get("search");
+  const navigate = useNavigate();
 
   const { user } = useContext(AuthContext)
 
   const { DeleteDocument, GetCollection } = useFirestore()
-  let {error, data: books, loading } = GetCollection('books', [ 'uid', '==', user.uid ])
+  let {error, data: books, loading } = GetCollection('books', [ 'uid', '==', user.uid ], search && { field: 'title', value: search})
+
 
   const handleDelete = async (e, id) => {
     e.preventDefault();
