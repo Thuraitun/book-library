@@ -33,7 +33,7 @@ const handleLogout = async() => {
 
 
   return (
-    <nav className={`border border-b-1 sticky top-0 ${isDark ? 'bg-dbg border-none' : 'bg-white'}`}>
+    <nav className={`border border-b-1 sticky top-0 z-30 ${isDark ? 'bg-dbg border-none' : 'bg-white'}`}>
         <ul className="flex items-center justify-between max-w-7xl p-4 mx-auto z-20">
 
             {/* Search */}
