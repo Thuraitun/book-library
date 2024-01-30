@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react'
+import { createContext, useEffect, useReducer } from 'react'
 
 const ThemeReducer = (state, action) => {
     switch (action.type) {
@@ -15,14 +15,24 @@ const ThemeContext = createContext();
 // themecontextprovider component
 const ThemeContextProvider = ({ children }) => {
 
+    const storedTheme = localStorage.getItem('theme');
+    const initialTheme = storedTheme ? storedTheme : 'light';
+
+    
+
     // define useReducer
     const [ state, dispatch ] = useReducer(ThemeReducer, {
-        theme: 'light'
+        theme: initialTheme
     })
 
     const changeTheme = (theme) => {
         dispatch({ type : 'CHANGE_THEME', payload: theme})
+        localStorage.setItem('theme', theme);
     }
+
+    useEffect(() => {
+        localStorage.setItem('theme', state.theme);
+    }, [state.theme]);
 
     const isDark = state.theme === 'dark';
 
