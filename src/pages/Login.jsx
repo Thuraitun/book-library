@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import { useState } from "react";
 import useSignin from "../hooks/useSignin";
+import Show from "../components/show/Show";
+import Hide from "../components/hide/Hide";
 
 const Login = () => {
 
@@ -9,6 +11,12 @@ const Login = () => {
 
   const [ email, setEmail ] = useState(''); 
   const [ password, setPassword ] = useState('');
+  const [ show, setShow ] = useState(false);
+
+  const handleShowHide = () => {
+    setShow(!show);
+  }
+
   const navigate = useNavigate()
 
   const { error, loading, signIn } = useSignin(); 
@@ -43,10 +51,15 @@ const Login = () => {
         </div>
 
         <div className="w-full px-3">
-        <label className={`block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 ${isDark ? 'text-gray-100' : ''}`}>
+          <label className={`block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 ${isDark ? 'text-gray-100' : ''}`}>
             Password
           </label>
-          <input value={password} onChange={e => setPassword(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"  type="password" placeholder="********" />
+          <div className="relative">
+            <input value={password} onChange={e => setPassword(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"  type={show ? 'text' : 'password'} placeholder="********" />
+            <span className="absolute top-2 right-2" onClick={handleShowHide}>
+              {show ? <Hide /> :  <Show />}
+            </span>
+          </div>
         </div>
 
         <div className="w-full px-3">
